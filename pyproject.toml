@@ -1,15 +1,15 @@
 [project]
-name = "WSGIEchoIP"
+name = "WSGIBump"
 dynamic = ["version"]
-description = "A simple WSGI app that returns the value of the `X-Forwarded-For` header"
+description = "A simple WSGI app that counts the number of requests to it, a visitor count perchance"
 readme = "README.md"
 license = {file = "LICENSE"}
 
-[project.urls]
-Homepage = "https://github.com/jb2170/WSGIEchoIP/"
+# [project.urls]
+# Homepage = "https://github.com/jb2170/WSGIBump/"
 
 [tool.setuptools.dynamic]
-version = {attr = "WSGIEchoIP.__version__"}
+version = {attr = "WSGIBump.__version__"}
 
 [build-system]
 requires = ["setuptools>=61.0"]

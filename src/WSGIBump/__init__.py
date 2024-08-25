@@ -1,46 +1,45 @@
 """WSGI Bump"""
 
-__version__ = "0.9.0"
+__version__ = "0.9.1"
 
 import os
 import json
 import contextlib
 
+from pathlib import Path
 from typing import Generator
 from http import HTTPStatus
 
-from .flocked import flocked
+from .flocked import open_lockfile, flocked
 
 class App:
     def __init__(self, env, start_response) -> None:
-        self.lock_filepath = os.environ.get(
+        self.lock_filepath = Path(os.environ.get(
             "WSGIBUMP_LOCK_FILEPATH",
             ".lock"
-        )
+        ))
         # keeping a separate lock file prevents headaches
         # from locking real files of interest
 
-        self.state_filepath = os.environ.get(
+        self.state_filepath = Path(os.environ.get(
             "WSGIBUMP_STATE_FILEPATH",
             "state.json"
-        )
+        ))
 
         self.env = env
         self.start_response = start_response
 
     @contextlib.contextmanager
     def locked(self):
-        with open(self.lock_filepath, "ab") as lock_file:
-            with flocked(lock_file):
+        with open_lockfile(self.lock_filepath) as f:
+            with flocked(f):
                 yield
 
     def read_config(self):
-        with open(self.state_filepath, "r") as f:
-            return json.load(f)
+        return json.loads(self.state_filepath.read_text())
 
     def write_config(self, j):
-        with open(self.state_filepath, "w") as f:
-            json.dump(j, f)
+        self.state_filepath.write_text(json.dumps(j) + "\n")
 
     def __iter__(self):
         return self.do_200()

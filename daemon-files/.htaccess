@@ -1,2 +1,2 @@
 RewriteEngine on
-RewriteRule ^(.*)$ unix:/public/home/jb2170/bump-jb2170-com-server|http://sneeds-seed-and-feed.com/ [P,NE,QSA]
+RewriteRule ^(.*)$ unix:/public/home/jb2170/sockets/bump-jb2170-com-server|http://sneeds-seed-and-feed.com/ [P,NE,QSA]

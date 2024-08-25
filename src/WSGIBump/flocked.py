@@ -1,17 +1,40 @@
 import contextlib
-import fcntl as fctl
+import fcntl as fctl # I dislike 'cntl'
+from pathlib import Path
+
 from io import IOBase
 from typing import Union
 
 @contextlib.contextmanager
-def flocked(f: Union[IOBase, int], op: int = fctl.LOCK_EX):
-    if isinstance(f, IOBase):
-        fd = f.fileno()
-    else:
-        fd = f
+def open_lockfile(filepath: str | Path):
+    """
+    Wrapper around the `open` builtin to ensure the unique existence
+    of the lockfile at `filepath`
+    """
+
+    if isinstance(filepath, str):
+        filepath = Path(filepath)
 
     try:
-        fctl.flock(fd, op)
+        # Try creating the lock file with O_EXCL
+        # O_EXCL is required to avoid sibling process race conditions of
+        # multiple processes each creating their own lockfile on top of each other
+        filepath.touch(exist_ok = False)
+    except FileExistsError:
+        # If it already exists then that's fine
+        pass
+
+    with filepath.open() as f:
+        yield f
+
+@contextlib.contextmanager
+def flocked(f: Union[IOBase, int], operation: int = fctl.LOCK_EX):
+    """
+    Context manager for locking a file via `flock`
+    """
+
+    fctl.flock(f, operation) # should this be inside the try block?
+    try:
         yield
     finally:
-        fctl.flock(fd, fctl.LOCK_UN)
+        fctl.flock(f, fctl.LOCK_UN)

@@ -3,5 +3,5 @@ __pycache__/
 /src/*.egg-info
 /venv/
 
-.lock
-state.json
+/.lock
+/state.json

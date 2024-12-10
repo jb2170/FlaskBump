@@ -1,29 +1,27 @@
-# WSGIEchoIP
+# FlaskBump
 
 ```
-$ curl -L ip.jb2170.com
-12.34.56.78
+$ curl -L bump.area51.jb2170.com
+1989
+$ curl -L bump.area51.jb2170.com
+1990
+$ curl -L bump.area51.jb2170.com
+1991
 ```
 
-A simple WSGI app that returns the value of the `X-Forwarded-For` header, so one can get their public IP address.
-
-No more need for `$ curl -L -D - ipconfig.org` and its unnecessary cookies!
-
+A simple Flask app that counts the number of requests to it, a visitor count perchance
 
 ## Installing
 
 I run this as a reverse proxy via Apache. Example systemd unit files and friends are in `daemon-files` of this repo
 
-- create a venv, say in `~/.local/var/lib/WSGIEchoIP`, and source it
-- `$ pip install WSGIEchoIP gunicorn`
+- create a venv, say in `~/.local/var/lib/FlaskBump`, and source it
+- `$ pip install FlaskBump gunicorn`
 - place the systemd unit file and shell script into the correct folders, for example I use `~/.local/var/lib/systemd/{etc/user,usr/bin}`
 - place the `.htaccess` file in the public http folder corresponding to the domain you want to serve the app from
 - adjust the unix socket path in the `.htaccess` file and `.service` unit
+- copy the default `state.json` file from `daemon-files` into the app's working directory (as specified as `WorkingDirectory` in the `.service` file)
 
 Make sure you have the `headers`, `proxy`, and `proxy_http` modules enabled for Apache!
 
 You can probably figure out the rest, enabling / starting the systemd service...
-
-## Customizing
-
-Setting the environment variable `FORWARDED_IP_HEADER_NAME=X-Sneed-Chuck` makes the app return the `X-Sneed-Chuck` header value instead. (perhaps nginx uses something different than `X-Forwarded-For`.)

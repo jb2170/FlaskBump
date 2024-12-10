@@ -1,15 +1,16 @@
 [project]
-name = "WSGIBump"
+name = "FlaskBump"
 dynamic = ["version"]
-description = "A simple WSGI app that counts the number of requests to it, a visitor count perchance"
+description = "A simple Flask app that counts the number of requests to it, a visitor count perchance"
 readme = "README.md"
 license = {file = "LICENSE"}
+dependencies = ["Flask"]
 
-# [project.urls]
-# Homepage = "https://github.com/jb2170/WSGIBump/"
+[project.urls]
+Homepage = "https://github.com/jb2170/FlaskBump/"
 
 [tool.setuptools.dynamic]
-version = {attr = "WSGIBump.__version__"}
+version = {attr = "FlaskBump.__version__"}
 
 [build-system]
 requires = ["setuptools>=61.0"]

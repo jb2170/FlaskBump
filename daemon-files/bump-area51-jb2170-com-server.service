@@ -1,0 +1,9 @@
+[Unit]
+PartOf=inet.target
+
+[Install]
+WantedBy=inet.target
+
+[Service]
+ExecStart=%h/.local/var/lib/systemd/bin/bump-area51-jb2170-com-server.sh
+WorkingDirectory=%h/.local/var/lib/FlaskBump

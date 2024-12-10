@@ -5,7 +5,6 @@ from pathlib import Path
 from io import IOBase
 from typing import Union
 
-@contextlib.contextmanager
 def open_lockfile(filepath: str | Path):
     """
     Wrapper around the `open` builtin to ensure the unique existence
@@ -24,8 +23,7 @@ def open_lockfile(filepath: str | Path):
         # If it already exists then that's fine
         pass
 
-    with filepath.open() as f:
-        yield f
+    return filepath.open()
 
 @contextlib.contextmanager
 def flocked(f: Union[IOBase, int], operation: int = fctl.LOCK_EX):
@@ -33,7 +31,7 @@ def flocked(f: Union[IOBase, int], operation: int = fctl.LOCK_EX):
     Context manager for locking a file via `flock`
     """
 
-    fctl.flock(f, operation) # should this be inside the try block?
+    fctl.flock(f, operation)
     try:
         yield
     finally:

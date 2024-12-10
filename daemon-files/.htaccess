@@ -1,2 +1,3 @@
+DirectoryIndex disabled
 RewriteEngine on
-RewriteRule ^(.*)$ unix:/public/home/jb2170/sockets/bump-jb2170-com-server|http://sneeds-seed-and-feed.com/ [P,NE,QSA]
+RewriteRule ^(.*)$ unix:/public/home/jb2170/sockets/bump-area51-jb2170-com-server|http://sneeds-seed-and-feed.com/$1 [P,NE,QSA]
